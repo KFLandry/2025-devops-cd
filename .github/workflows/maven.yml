@@ -42,6 +42,7 @@ jobs:
     - uses: actions/checkout@v4
     - name: Build Docker image
       run: |
+        
         docker build -t ${{ github.repository }}:${{ github.sha }} .
         docker tag ${{ github.repository }}:${{ github.sha }} ${{ github.repository }}:latest
 
@@ -53,8 +54,9 @@ jobs:
 
     - name: Push Docker image
       run: |
-        docker push ${{ github.repository }}:${{ github.sha }}
-        docker push ${{ github.repository }}:latest
+        
+        docker push ${{ toLower(github.repository) }}:${{ github.sha }}
+        docker push ${{ toLower(github.repository) }}:latest
 
   push_docs:
     runs-on: ubuntu-latest

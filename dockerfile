@@ -3,6 +3,7 @@ WORKDIR /workspace
 
 # cache layer: copy only wrapper + pom to download deps
 COPY mvnw pom.xml ./
+COPY .mvn .mvn
 RUN chmod +x mvnw
 RUN ./mvnw -B -DskipTests dependency:go-offline
 

@@ -1,9 +1,19 @@
 FROM eclipse-temurin:21-jdk AS build
 WORKDIR /workspace
-ARG JAR_FILE=gitlab-artifacts/build-ci/target/tp-cd-2025-0.0.1-SNAPSHOT.jar
-COPY $JAR_FILE .
-RUN java -Djarmode=layertools -jar tp-cd-2025-0.0.1-SNAPSHOT.jar extract --destination extracted
 
+# cache layer: copy only wrapper + pom to download deps
+COPY mvnw pom.xml ./
+RUN chmod +x mvnw
+RUN ./mvnw -B -DskipTests dependency:go-offline
+
+# copy sources and build
+COPY src ./src
+COPY settings.xml ./
+RUN ./mvnw -B -DskipTests package
+
+# extract layers
+ARG JAR_FILE=target/tp-cd-2025-0.0.1-SNAPSHOT.jar
+RUN java -Djarmode=layers -jar ${JAR_FILE} extract --destination /workspace/extracted
 
 FROM eclipse-temurin:21-jre
 LABEL wl.maintainer='Wilfried Landry <kankeulandry22@gmail.com>'
@@ -18,5 +28,4 @@ ENV TZ="Europe/Paris"
 
 EXPOSE 8080
 
-
-ENTRYPOINT ["java", "-jar", "/runtime/app/tcp-cd-2025-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java", "org.springframework.boot.loader.JarLauncher"]

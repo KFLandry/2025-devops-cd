@@ -1,13 +1,8 @@
 FROM eclipse-temurin:21-jdk AS build
 WORKDIR /workspace
-
-COPY . .
-
-RUN ./mvnw clean package -DskipTests
-
-COPY target .
-
-RUN java -Djarmode=layertools -jar target/tp-cd-2025-0.0.1-SNAPSHOT.jar extract --destination extracted
+ARG JAR_FILE=gitlab-artifacts/build-ci/target/tp-cd-2025-0.0.1-SNAPSHOT.jar
+COPY $JAR_FILE .
+RUN java -Djarmode=layertools -jar tp-cd-2025-0.0.1-SNAPSHOT.jar extract --destination extracted
 
 
 FROM eclipse-temurin:21-jre

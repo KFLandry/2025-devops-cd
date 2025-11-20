@@ -1,4 +1,4 @@
-FROM openjdk:21-jdk AS build
+FROM eclipse-temurin:21-jdk AS build
 WORKDIR /workspace
 
 COPY . .
@@ -10,7 +10,7 @@ COPY target .
 RUN java -Djarmode=layertools -jar target/tp-cd-2025-0.0.1-SNAPSHOT.jar extract --destination extracted
 
 
-FROM openjdk:21-jdk
+FROM eclipse-temurin:21-jre
 LABEL wl.maintainer='Wilfried Landry <kankeulandry22@gmail.com>'
 ARG EXTRACTED=/workspace/extracted
 WORKDIR /runtime/app
@@ -24,4 +24,4 @@ ENV TZ="Europe/Paris"
 EXPOSE 8080
 
 
-ENTRYPOINT ["/bin/sh", "-c", "./mvnw spring-boot:run"]
+ENTRYPOINT ["java", "-jar", "/runtime/app/tcp-cd-2025-0.0.1-SNAPSHOT.jar"]

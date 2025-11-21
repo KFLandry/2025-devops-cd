@@ -94,3 +94,4 @@ jobs:
           github_deployment: true
           deployment_environment: "production"
           github_token: ${{ secrets.PAT_DOCKER_HUB }}
+

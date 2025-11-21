@@ -104,7 +104,7 @@ jobs:
     needs: docker_push
     steps:
       - name: Deploy to Render
-        uses: gh-actions-workflows/deploy-docker-render@v1.
+        uses: gh-actions-workflows/deploy-docker-render@v1.3
         with:
           deploy-hook: ${{ secrets.RENDER_DEPLOY_HOOK }}
           image-url: docker.io/kflandry/tp-cd-2025:latest

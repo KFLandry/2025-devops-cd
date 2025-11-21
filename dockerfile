@@ -24,9 +24,9 @@ COPY --from=build ${EXTRACTED}/dependencies/ ./
 COPY --from=build ${EXTRACTED}/spring-boot-loader/ ./
 COPY --from=build ${EXTRACTED}/snapshot-dependencies/ ./
 COPY --from=build ${EXTRACTED}/application/ ./
-WORKDIR /runtime
+
 ENV TZ="Europe/Paris"
 
 EXPOSE 8080
 
-ENTRYPOINT [ "java", "org.springframework.boot.loader.WarLauncher" ]
+ENTRYPOINT ["sh", "-c", "java -cp /runtime/app org.springframework.boot.loader.WarLauncher"]

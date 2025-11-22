@@ -93,7 +93,7 @@ jobs:
           ls -la ./dist || true
 
       - name: Deploy to Netlify
-        uses: nwtgck/actions-netlify@v2.1.0
+        uses: nwtgck/actions-netlify@v3.0
         with:
           publish-dir: "./dist"
           production-branch: main
@@ -118,4 +118,5 @@ jobs:
           image-url: docker.io/kflandry/tp-cd-2025:latest
           render-api-key: ${{ secrets.RENDER_API_KEY }}
           wait-for-deployment: true
+
 
